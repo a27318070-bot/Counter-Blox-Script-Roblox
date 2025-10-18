@@ -1,2 +1,1 @@
-# Counter-Blox-Script-Roblox
-Counter Blox Script Roblox:esp,AutoAim
+After enabling the script, wait for 10-25 seconds for ESP to turn on
