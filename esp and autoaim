@@ -1,0 +1,286 @@
+local ts = game:GetService("TweenService")
+local plr = game.Players.LocalPlayer
+local trufal = false
+local gui = Instance.new("ScreenGui", plr.PlayerGui)
+gui.Name = "It is cheaaat!!!"
+local frame = Instance.new("Frame",gui)
+frame.Name = "core"
+frame.Position = UDim2.new(0.525, 0, 0.593, 0)
+frame.Size = UDim2.new(0, 267 , 0, 172)
+frame.Visible = false
+frame.BackgroundColor3 = Color3.new(0.0431373, 0.988235, 0.278431)
+local dd = Instance.new("UIDragDetector",frame)
+local button = Instance.new("TextButton", frame)
+button.Name = "buttonfly"
+button.Text = "on"
+button.Position = UDim2.new(0.124, 0,0.355, 0)
+button.Size = UDim2.new(0, 200,0, 50)
+button.TextScaled = true
+button.BackgroundColor3 = Color3.new(0.211765, 0.533333, 0.196078)
+button.Visible = false
+local on = Instance.new("TextButton",gui)
+on.Name = "onbutton"
+on.Position = UDim2.new(0.864, 0,0.43, 0)
+on.Size = UDim2.new(0, 88,0, 107)
+on.BackgroundColor3 = Color3.new(0.552941, 1, 0.27451)
+on.Text = "On"
+on.TextScaled = true
+on.MouseButton1Click:Connect(function()
+	if trufal == true then
+		trufal = false
+		frame.Visible = false
+		button.Visible = false
+	elseif trufal == false then
+		trufal = true
+		frame.Visible = true
+		button.Visible = true
+	end
+end)
+local textlabel = Instance.new("TextLabel", frame)
+textlabel.Name = "by"
+textlabel.Position = UDim2.new(0.200, 0,0, 0)
+textlabel.Size = UDim2.new(0, 170,0, 39)
+textlabel.Text = "CounterBloxScript"
+textlabel.TextScaled = true
+textlabel.BackgroundTransparency = 1
+local by = Instance.new("TextLabel", frame)
+by.Name = "by"
+by.Text = "by:Kik0no"
+by.TextScaled = true
+by.Position = UDim2.new(0, 0,0, 130)
+by.Size = UDim2.new(0, 79,0, 32)
+by.BackgroundTransparency = 1
+local esp = Instance.new("TextButton", frame)
+esp.Name = "esp"
+esp.Position = UDim2.new(0.400, 0,0.750, 0)
+esp.Size = UDim2.new(0, 143,0, 30)
+esp.BackgroundColor3 = Color3.new(0.85098, 0.0627451, 0.0784314)
+esp.Text = "esp on"
+
+local button = button
+local playerBlock = nil
+
+local function createPlayerBlock()
+	if playerBlock then
+		playerBlock:Destroy()
+		playerBlock = nil
+	end
+	local block = Instance.new("Part")
+	block.Name = "MyPlayerBlock"
+	block.Size = Vector3.new(3, 1, 3)
+	block.Shape = Enum.PartType.Block
+	block.BrickColor = BrickColor.new("Medium stone grey")
+	block.Anchored = true
+	block.CanCollide = true
+	block.Transparency = 0.5
+	block.Parent = workspace
+	return block
+end
+
+local function updateBlockPosition()
+	if playerBlock and game.Players.LocalPlayer.Character then
+		local character = game.Players.LocalPlayer.Character
+		local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
+
+		if humanoidRootPart then
+			playerBlock.Position = humanoidRootPart.Position + Vector3.new(0, -4, 0)
+		end
+	end
+end
+
+button.MouseButton1Click:Connect(function()
+	if playerBlock then
+		playerBlock:Destroy()
+		playerBlock = nil
+		button.Text = "fly"
+	else
+		playerBlock = createPlayerBlock()
+		button.Text = "unfly"
+		while playerBlock do
+			updateBlockPosition()
+			wait(0.05)
+		end
+	end
+end)
+
+game.Players.LocalPlayer.CharacterRemoving:Connect(function()
+	if playerBlock then
+		playerBlock:Destroy()
+		playerBlock = nil
+	end
+end)
+
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local LocalPlayer = Players.LocalPlayer
+
+
+local ESP_ENABLED = false
+local ESPHolders = {}
+
+local function createESP(player)
+	if not ESP_ENABLED then return end
+	if ESPHolders[player] then
+		if ESPHolders[player].Highlight then
+			ESPHolders[player].Highlight:Destroy()
+		end
+		if ESPHolders[player].Billboard then
+			ESPHolders[player].Billboard:Destroy()
+		end
+	end
+
+	local character = player.Character
+	if not character then return end
+	if not character:FindFirstChild("Humanoid") then
+		character:WaitForChild("Humanoid", 5)
+	end
+
+	if not character:FindFirstChild("HumanoidRootPart") then
+		character:WaitForChild("HumanoidRootPart", 5)
+	end
+
+	if not character.Humanoid or not character.HumanoidRootPart then return end
+	local highlight = Instance.new("Highlight")
+	highlight.Name = "ESP_Highlight"
+	highlight.Adornee = character
+	highlight.FillColor = Color3.fromRGB(255, 0, 0)
+	highlight.OutlineColor = Color3.fromRGB(255, 255, 0)
+	highlight.FillTransparency = 0.7
+	highlight.OutlineTransparency = 0
+	highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+	highlight.Parent = character
+	local billboard = Instance.new("BillboardGui")
+	billboard.Name = "ESP_Billboard"
+	billboard.Size = UDim2.new(0, 200, 0, 50)
+	billboard.AlwaysOnTop = true
+	billboard.StudsOffset = Vector3.new(0, 3, 0)
+	billboard.Adornee = character.HumanoidRootPart
+	billboard.MaxDistance = 500
+	billboard.Parent = character.HumanoidRootPart
+
+	local label = Instance.new("TextLabel")
+	label.Text = player.Name
+	label.TextColor3 = Color3.fromRGB(255, 255, 255)
+	label.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+	label.TextStrokeTransparency = 0
+	label.TextSize = 14
+	label.Font = Enum.Font.GothamBold
+	label.BackgroundTransparency = 1
+	label.Size = UDim2.new(1, 0, 1, 0)
+	label.Parent = billboard
+	ESPHolders[player] = {
+		Highlight = highlight,
+		Billboard = billboard,
+		Character = character
+	}
+end
+local function removeESP(player)
+	if ESPHolders[player] then
+		if ESPHolders[player].Highlight then
+			ESPHolders[player].Highlight:Destroy()
+		end
+		if ESPHolders[player].Billboard then
+			ESPHolders[player].Billboard:Destroy()
+		end
+		ESPHolders[player] = nil
+	end
+end
+
+local function toggleESP()
+	ESP_ENABLED = not ESP_ENABLED
+
+	if ESP_ENABLED then
+		for _, player in pairs(Players:GetPlayers()) do
+			if player ~= LocalPlayer then
+				spawn(function()
+					createESP(player)
+				end)
+			end
+		end
+	else
+		for player, esp in pairs(ESPHolders) do
+			removeESP(player)
+		end
+		ESPHolders = {}
+	end
+end
+local function onPlayerAdded(player)
+	if player == LocalPlayer then return end
+	local function onCharacterAdded(character)
+		local humanoid = character:WaitForChild("Humanoid", 10)
+		local rootPart = character:WaitForChild("HumanoidRootPart", 10)
+
+		if humanoid and rootPart then
+			wait(1)
+			if ESP_ENABLED then
+				createESP(player)
+			end
+			humanoid.Died:Connect(function()
+				removeESP(player)
+				humanoid:GetPropertyChangedSignal("Health"):Wait()
+				if humanoid.Health > 0 then
+					wait(2)
+					if ESP_ENABLED then
+						createESP(player)
+					end
+				end
+			end)
+		end
+	end
+	if player.Character then
+		onCharacterAdded(player.Character)
+	end
+	player.CharacterAdded:Connect(onCharacterAdded)
+	player.AncestryChanged:Connect(function()
+		if not player:IsDescendantOf(Players) then
+			removeESP(player)
+		end
+	end)
+end
+local function onPlayerRemoving(player)
+	removeESP(player)
+end
+for _, player in pairs(Players:GetPlayers()) do
+	if player ~= LocalPlayer then
+		onPlayerAdded(player)
+	end
+end
+Players.PlayerAdded:Connect(onPlayerAdded)
+Players.PlayerRemoving:Connect(onPlayerRemoving)
+
+esp.MouseButton1Click:Connect(function()
+	toggleESP()
+	if ESP_ENABLED then
+		esp.Text = "ESP: ON"
+		esp.BackgroundColor3 = Color3.fromRGB(0, 100, 0)
+	else
+		esp.Text = "ESP: OFF"
+		esp.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+	end
+end)
+local function refreshAllESP()
+	if ESP_ENABLED then
+		for _, player in pairs(Players:GetPlayers()) do
+			if player ~= LocalPlayer then
+				spawn(function()
+					createESP(player)
+				end)
+			end
+		end
+	end
+end
+
+LocalPlayer.AncestryChanged:Connect(function()
+	if not LocalPlayer:IsDescendantOf(Players) then
+		for player, esp in pairs(ESPHolders) do
+			removeESP(player)
+		end
+		ESPHolders = {}
+	end
+end)
+
+_G.ESP = {
+	toggle = toggleESP,
+	refresh = refreshAllESP,
+	status = function() return ESP_ENABLED end
+}
